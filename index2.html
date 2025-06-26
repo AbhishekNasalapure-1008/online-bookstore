@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Store - Modern Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+
+        .nav-tab.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+            border-color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-container {
+            margin-bottom: 40px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: white;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .book-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .book-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .book-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .book-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-to-cart-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .add-to-cart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .add-to-cart-btn:hover::before {
+            left: 100%;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-book {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-20px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .book-icon {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-book" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="floating-book" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="floating-book" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="floating-book" style="left: 40%; animation-delay: 6s;"></div>
+        <div class="floating-book" style="left: 50%; animation-delay: 8s;"></div>
+        <div class="floating-book" style="left: 60%; animation-delay: 10s;"></div>
+        <div class="floating-book" style="left: 70%; animation-delay: 12s;"></div>
+        <div class="floating-book" style="left: 80%; animation-delay: 14s;"></div>
+        <div class="floating-book" style="left: 90%; animation-delay: 16s;"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>📚 Book Store</h1>
+            <div class="nav-tabs">
+                <div class="nav-tab active">🏪 Store</div>
+                <div class="nav-tab">⚙️ Admin</div>
+                <div class="nav-tab">🛒 Cart</div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="🔍 Search books by name or description...">
+            </div>
+
+            <div class="books-grid">
+                <div class="book-card">
+                    <h3 class="book-title">
+                        <span class="book-icon">⚛️</span>
+                        Atomic Habits
+                    </h3>
+                    <p class="book-description">A guide to building good habits and breaking bad ones. Learn the science behind habit formation.</p>
+                    <div class="book-footer">
+                        <span class="book-price">$20.00</span>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="book-card">
+                    <h3 class="book-title">
+                        <span class="book-icon">🧙‍♂️</span>
+                        The Alchemist
+                    </h3>
+                    <p class="book-description">A novel about dreams and destiny. Follow Santiago's journey to find his personal legend.</p>
+                    <div class="book-footer">
+                        <span class="book-price">$15.00</span>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="book-card">
+                    <h3 class="book-title">
+                        <span class="book-icon">💻</span>
+                        Clean Code
+                    </h3>
+                    <p class="book-description">A handbook of agile software craftsmanship. Write code that humans can understand.</p>
+                    <div class="book-footer">
+                        <span class="book-price">$30.00</span>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.innerHTML = '✓ Added!';
+                this.style.background = '#28a745';
+                setTimeout(() => {
+                    this.innerHTML = 'Add to Cart';
+                    this.style.background = '';
+                }, 2000);
+            });
+        });
+
+        // Search functionality
+        document.querySelector('.search-box').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('.book-card').forEach(card => {
+                const title = card.querySelector('.book-title').textContent.toLowerCase();
+                const description = card.querySelector('.book-description').textContent.toLowerCase();
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
